@@ -7,7 +7,7 @@ export const playListData: Track[] = [
       artist: 'Sami Yusuf',
       album: 'Spiritual Melodies',
       artwork: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=500&h=500&auto=format&fit=crop',
-      url: require('./Assets/allah-allah-aghisna (3).mp3'),
+      url: require('./Assets/allah_allah_aghisna_3.mp3'),
     },
     {
       id: 2,
@@ -15,7 +15,7 @@ export const playListData: Track[] = [
       artist: 'Sami Yusuf',
       album: 'My Ummah',
       artwork: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=500&h=500&auto=format&fit=crop',
-      url: require('./Assets/allah-allah-aghisna (3).mp3'), // Placeholder URL as per your request
+      url: require('./Assets/allah_allah_aghisna_4.mp3'), 
     },
     {
       id: 3,
@@ -23,7 +23,7 @@ export const playListData: Track[] = [
       artist: 'Maher Zain',
       album: 'Thank You Allah',
       artwork: 'https://images.unsplash.com/photo-1564121211835-e88c852648ab?q=80&w=500&h=500&auto=format&fit=crop',
-      url: require('./Assets/allah-allah-aghisna (3).mp3'),
+      url: require('./Assets/allah_allah_aghisna_5.mp3'),
     },
     {
       id: 4,
@@ -31,14 +31,6 @@ export const playListData: Track[] = [
       artist: 'Maher Zain',
       album: 'Forgive Me',
       artwork: 'https://images.unsplash.com/photo-1519817650390-64a934479f67?q=80&w=500&h=500&auto=format&fit=crop',
-      url: require('./Assets/allah-allah-aghisna (3).mp3'),
-    },
-    {
-      id: 5,
-      title: 'The Chosen One',
-      artist: 'Maher Zain',
-      album: 'One',
-      artwork: 'https://images.unsplash.com/photo-1584551271411-c1aa1d2806b2?q=80&w=500&h=500&auto=format&fit=crop',
-      url: require('./Assets/allah-allah-aghisna (3).mp3'),
+      url: require('./Assets/allah_allah_aghisna_6.mp3'),
     },
   ];

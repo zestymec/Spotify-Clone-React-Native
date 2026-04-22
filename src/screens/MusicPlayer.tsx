@@ -14,7 +14,7 @@ import ControlCenter from '../components/ControlCenter';
 const {width} = Dimensions.get('window')
 
 const MusicPlayer = () => {
-    const [track, setTrack] = useState<Track | null | undefined>(null)
+    const [track, setTrack] = useState<Track | null | undefined>()
 
     useEffect(() => {
         const setup = async () => {
@@ -39,25 +39,21 @@ const MusicPlayer = () => {
     }, [])
 
     useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], async event => {
-        switch (event.type) {
-            case Event.PlaybackActiveTrackChanged:
-                const { index } = event
-                if (index !== undefined && index !== null) {
-                    const playingTrack = await TrackPlayer.getTrack(index)
-                    setTrack(playingTrack)
-                }
-                break
+        if (event.type === Event.PlaybackActiveTrackChanged && event.index !== undefined) {
+            const playingTrack = await TrackPlayer.getTrack(event.index)
+            setTrack(playingTrack)
         }
     })
 
-    const renderartwork = () => {
+    const renderartwork = ({item}: any) => {
         return (
             <View style={styles.listArtWrapper}>
                 <View style={styles.albumContainer}>
-                    {track?.artwork && (
+                    {item.artwork && (
                         <Image
                             style={styles.albumArtImg}
-                            source={{ uri: track?.artwork?.toString() }}
+                            source={{ uri: item.artwork.toString() }}
+                            resizeMode="contain"
                         />
                     )}
                 </View>
@@ -68,11 +64,22 @@ const MusicPlayer = () => {
     return (
         <View style={styles.container}>
             <FlatList
-                horizontal
-                data={playListData}
-                renderItem={renderartwork}
-                keyExtractor={song => song.id.toString()}
-            />
+    horizontal
+    pagingEnabled
+    snapToAlignment="center"
+    decelerationRate="fast"
+    snapToInterval={width} 
+    disableIntervalMomentum={true}
+    showsHorizontalScrollIndicator={false}
+    data={playListData}
+    renderItem={renderartwork}
+    keyExtractor={song => song.id.toString()}
+    getItemLayout={(_, index) => ({
+        length: width,
+        offset: width * index,
+        index,
+    })}
+/>
             <SongInfo track={track} />
             <SongSlider />
             <ControlCenter />
@@ -98,7 +105,8 @@ const styles = StyleSheet.create({
     },
     albumArtImg: {
         height: '100%',
-        borderRadius: 4,
+        width: '100%',
+        borderRadius: 8,
     },
 });
 
