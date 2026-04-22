@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
-import { Dimensions, FlatList, Image, StyleSheet, View , Text } from 'react-native';
-
+import React, {useState, useEffect} from 'react'
+import { Dimensions, FlatList, Image, StyleSheet, View } from 'react-native';
 import TrackPlayer, {
+    Capability,
     Event,
     Track,
     useTrackPlayerEvents
@@ -10,73 +10,96 @@ import { playListData } from '../constants';
 import SongInfo from '../components/SongInfo';
 import SongSlider from '../components/SongSlider';
 import ControlCenter from '../components/ControlCenter';
+
 const {width} = Dimensions.get('window')
 
 const MusicPlayer = () => {
     const [track, setTrack] = useState<Track | null | undefined>(null)
 
-useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], async event => {
-    switch (event.type) {
-        case Event.PlaybackActiveTrackChanged:
-            const { index } = event
-            if (index !== undefined && index !== null) {
-                const playingTrack = await TrackPlayer.getTrack(index)
-                setTrack(playingTrack)
+    useEffect(() => {
+        const setup = async () => {
+            try {
+                await TrackPlayer.setupPlayer()
+                await TrackPlayer.updateOptions({
+                    capabilities: [
+                        Capability.Play,
+                        Capability.Pause,
+                        Capability.SkipToNext,
+                        Capability.SkipToPrevious,
+                        Capability.Stop,
+                    ],
+                    compactCapabilities: [Capability.Play, Capability.Pause],
+                })
+                await TrackPlayer.add(playListData)
+            } catch (error) {
+                console.log("Setup Error:", error)
             }
-            break
-    }
-})
-    const renderartwork = ( ) =>{
-        return(
+        }
+        setup()
+    }, [])
+
+    useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], async event => {
+        switch (event.type) {
+            case Event.PlaybackActiveTrackChanged:
+                const { index } = event
+                if (index !== undefined && index !== null) {
+                    const playingTrack = await TrackPlayer.getTrack(index)
+                    setTrack(playingTrack)
+                }
+                break
+        }
+    })
+
+    const renderartwork = () => {
+        return (
             <View style={styles.listArtWrapper}>
                 <View style={styles.albumContainer}>
                     {track?.artwork && (
                         <Image
-                        style={styles.albumArtImg}
-                        source={{uri: track?.artwork?.toString()}}
+                            style={styles.albumArtImg}
+                            source={{ uri: track?.artwork?.toString() }}
                         />
                     )}
                 </View>
             </View>
         )
     }
-  return (
-    <View style={styles.container}>
-        <FlatList
-        horizontal
-        data={playListData}
-        renderItem={renderartwork}
-        keyExtractor={song => song.id.toString()}
-        />
 
-        <SongInfo track={track}/>
-        <SongSlider />
-        <ControlCenter />
-    </View>
-  )
+    return (
+        <View style={styles.container}>
+            <FlatList
+                horizontal
+                data={playListData}
+                renderItem={renderartwork}
+                keyExtractor={song => song.id.toString()}
+            />
+            <SongInfo track={track} />
+            <SongSlider />
+            <ControlCenter />
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#001d23',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#001d23',
     },
     listArtWrapper: {
         width: width,
-      justifyContent: 'center',
-      alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     albumContainer: {
-      width: 300,
-      height: 300,
+        width: 300,
+        height: 300,
     },
     albumArtImg: {
-      height: '100%',
-      borderRadius: 4,
+        height: '100%',
+        borderRadius: 4,
     },
-  });
-  
+});
 
 export default MusicPlayer
