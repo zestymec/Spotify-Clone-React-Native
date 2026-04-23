@@ -30,7 +30,7 @@ export const playListData: Track[] = [
       title: 'Ya Nabi Salam Alayka',
       artist: 'Maher Zain',
       album: 'Forgive Me',
-      artwork: 'https://images.unsplash.com/photo-1519817650390-64a934479f67?q=80&w=500&h=500&auto=format&fit=crop',
+      artwork: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=500&h=500&auto=format&fit=crops',
       url: require('./Assets/allah_allah_aghisna_6.mp3'),
     },
   ];
